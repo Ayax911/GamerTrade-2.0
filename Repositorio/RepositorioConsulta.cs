@@ -14,7 +14,7 @@ namespace APiGamer.Repositorio
                "IProvedor no puede ser null. Verificar configuración de inyección de dependencias en Program.cs."
            );
         }
-        public Task<DataTable> EjecturaConsultaParametrizada(string consulta, Dictionary<string, object> parametros)
+        public async Task<DataTable> EjecturaConsultaParametrizada(string consulta, Dictionary<string, object>? parametros)
         {
             if (string.IsNullOrEmpty(consulta))
             {
@@ -42,92 +42,100 @@ namespace APiGamer.Repositorio
                     {
                         command.CommandText = consulta;
                         command.CommandType = CommandType.Text;
-                        foreach (var parametro in parametros)
-                        {
-                            var sqlParameter = command.CreateParameter();
-                            sqlParameter.ParameterName = parametro.Key;
-                            sqlParameter.Value = parametro.Value ?? DBNull.Value;
-                            command.Parameters.Add(sqlParameter);
-                        }
+                        agregarParametros((SqlCommand)command, parametros);
                         using (var adapter = new SqlDataAdapter((SqlCommand)command))
                         {
                             var dataTable = new DataTable();
                             adapter.Fill(dataTable);
-                            _provedor.CerrarConexion();
-                            return Task.FromResult(dataTable);
-
+                            return await Task.FromResult(dataTable);
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (SqlException ex)
             {
-                throw new Exception("Error al ejecutar la consulta parametrizada.", ex);
-            }
-        }
-        public Task<(bool Esvalida, string mensaje)> ValidarConsulta(string consulta, Dictionary<string, object> parametros)
-        {
-            List<string> palabrasProhibidas =
-        [
-                "INSERT", "UPDATE", "DELETE",
-                "DROP", "ALTER", "CREATE", "EXEC", "EXECUTE", "UNION", "UNION SELECT",
-                "--", ";--", ";", "/*", "*/", "/*!", "*/", "#",
-                "@@", "@", "CHAR", "CHAR(", "NCHAR", "VARCHAR", "NVARCHAR", "TEXT", "NTEXT",
-                "CAST(", "CONVERT(", "DECLARE", "SET", "SELECT", "FROM", "WHERE", "OR", "AND",
-                "LIKE", "IN", "IS NULL", "IS NOT NULL",
-                "XP_", "SP_", "SP_MS", "SYS.", "SYSOBJECTS", "INFORMATION_SCHEMA", "INFORMATION_SCHEMA.TABLES",
-                "OBJECT_ID(", "OBJECT_NAME(", "DB_ID(", "DATABASE()", "SCHEMA", "SCHEMA_NAME(",
-                "GRANT", "REVOKE", "USE", "SHUTDOWN",
-                "WAITFOR", "WAITFOR DELAY", "SLEEP(", "BENCHMARK(", "DELAY",
-                "LOAD_FILE(", "INTO OUTFILE", "INTO DUMPFILE", "LOAD DATA", "SELECT INTO",
-                "OPENROWSET", "OPENDATASOURCE", "OPENQUERY",
-                "REPLACE", "TRUNCATE", "MERGE",
-                "EXEC sp_executesql", "EXECUTE IMMEDIATE",
-                "SYSTEM_USER", "CURRENT_USER", "USER()", "SESSION_USER",
-                "PASSWORD", "HASHBYTES(", "CRYPT_GEN_RANDOM(",
-                "CAST", "CONVERT", "INFORMATION_SCHEMA.COLUMNS",
-                "/*", "*/", "<!--", "-->",  "/*", "*/",
-                "0x", "0x27", "' OR '1'='1", "\" OR \"1\"=\"1", "' OR 1=1 --",
-                "OR 1=1", "'; DROP TABLE", "'); DROP TABLE",
-                "BENCHMARK(", "REGEXP", "RLIKE",
-                "`", "\"", "'"];
-            foreach (var palabra in palabrasProhibidas)
-            {
-                if (consulta.ToUpper().Contains(palabra))
+                string mensajeError = ex.Number switch
                 {
-                    return Task.FromResult((false, $"La consulta contiene una palabra prohibida: {palabra}"));
-                }
+                    2 => "Timeout: La consulta tardó demasiado en ejecutarse",
+                    207 => "Nombre de columna inválido en la consulta SQL",
+                    208 => "Tabla o vista especificada no existe en la base de datos",
+                    102 => "Error de sintaxis en la consulta SQL",
+                    515 => "Valor null no permitido en columna que no acepta nulls",
+                    547 => "Violación de restricción de clave foránea",
+                    2812 => "Procedimiento almacenado no encontrado",
+                    8152 => "String or binary data would be truncated (datos demasiado largos)",
+                    2146 => "Error de conversión de tipos de datos",
+                    _ => $"Error SQL Server (Código {ex.Number}): {ex.Message}"
+                };
+                throw new InvalidOperationException(
+                    $"Error al ejecutar consulta SQL: {mensajeError}. Consulta: {consulta}",
+                    ex
+                );
             }
-            return Task.FromResult((true, "La consulta es válida."));
         }
-        public Task<DataTable> EjecturaProcedimientoAlmacenado(string consulta, Dictionary<string, object> parametros)
+        public async Task<(bool Esvalida, string mensaje)> ValidarConsulta(string consulta, Dictionary<string, object>? parametros)
+        {
+          
+            return await Task.FromResult((true, "La consulta es válida."));
+        }
+        public async Task<DataTable> EjecturaProcedimientoAlmacenado(string NombreSp, Dictionary<string, object> parametros)
         {
             parametros = parametros ?? new Dictionary<string, object>();
-            if (string.IsNullOrEmpty(consulta))
-            {
-                throw new ArgumentException("El nombre del procedimiento almacenado no puede ser nulo o vacío.", nameof(consulta));
-            }
             using (var coneccion = _provedor.AbrirConexion())
             {
                 using (var command = coneccion.CreateCommand())
                 {
-                    command.CommandText = consulta;
+                    command.CommandText = NombreSp;
                     command.CommandType = CommandType.StoredProcedure;
-                    foreach (var parametro in parametros)
-                    {
-                        var SqlParameter = command.CreateParameter();
-                        SqlParameter.ParameterName = parametro.Key;
-                        SqlParameter.Value = parametro.Value ?? DBNull.Value;
-                        command.Parameters.Add(SqlParameter);
-                    }
-                    using(var adapter = new SqlDataAdapter((SqlCommand)command))
+                    agregarParametros((SqlCommand)command, parametros);
+                    using (var adapter = new SqlDataAdapter((SqlCommand)command))
                     {
                         var dataTable = new DataTable();
                         adapter.Fill(dataTable);
-                        return Task.FromResult(dataTable);
+                        _provedor.CerrarConexion();
+                        return await Task.FromResult(dataTable);
                     }
                 }
             }
+        }
+        public static void agregarParametros(SqlCommand command, Dictionary<string, object>? parametros)
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command), "El comando no puede ser null.");
+            }
+            if (parametros == null)
+            {
+                throw new ArgumentNullException(nameof(parametros), "El diccionario de parámetros no puede ser null.");
+            }
+            foreach (var parametro in parametros)
+            {
+                command.Parameters.Add(CrearSQLParametroOptimizado(parametro.Key,parametro.Value));
+            }
+        }
+        public static SqlParameter CrearSQLParametroOptimizado(string nombre, object? valor)
+        {
+            if (string.IsNullOrEmpty(nombre))
+            {
+                throw new ArgumentException("El nombre del parámetro no puede ser nulo o vacío.", nameof(nombre));
+            }
+            return valor switch
+            {
+                null => new SqlParameter(nombre, DBNull.Value),
+                int intValue => new SqlParameter(nombre, SqlDbType.Int) { Value = intValue },
+                long longValue => new SqlParameter(nombre, SqlDbType.BigInt) { Value = longValue },
+                string strValue => new SqlParameter(nombre, SqlDbType.NVarChar, Math.Min(strValue.Length, 4000)) { Value = strValue },
+                bool boolValue => new SqlParameter(nombre, SqlDbType.Bit) { Value = boolValue },
+                DateTime dateTimeValue => new SqlParameter(nombre, SqlDbType.DateTime2) { Value = dateTimeValue },
+                DateOnly dateOnlyValue => new SqlParameter(nombre, SqlDbType.Date) { Value= dateOnlyValue.ToDateTime(TimeOnly.MinValue)},
+                TimeOnly timeOnlyValue => new SqlParameter(nombre, SqlDbType.Time) { Value = timeOnlyValue.ToTimeSpan() },
+                decimal decimalValue => new SqlParameter(nombre, SqlDbType.Decimal) { Value = decimalValue },
+                double doubleValue => new SqlParameter(nombre, SqlDbType.Float) { Value = doubleValue },
+                float floatValue => new SqlParameter(nombre, SqlDbType.Real) { Value = floatValue },
+                byte[] byteArrayValue => new SqlParameter(nombre, SqlDbType.VarBinary, Math.Min(byteArrayValue.Length, 8000)) { Value = byteArrayValue },
+                Guid guidValue => new SqlParameter(nombre, SqlDbType.UniqueIdentifier) { Value = guidValue },
+                _ => new SqlParameter(nombre, valor ?? DBNull.Value)
+            };
         }
     }
 }

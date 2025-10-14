@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "ySzW1HJOpTU=",
+  "dgSpecHash": "CDUbGiMAAaI=",
   "success": true,
   "projectFilePath": "C:\\Users\\kewin\\Documents\\proyectos c#\\APiGamer\\APiGamer\\APiGamer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kewin\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\kewin\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
+    "C:\\Users\\kewin\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\kewin\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.9\\microsoft.aspnetcore.openapi.9.0.9.nupkg.sha512",
     "C:\\Users\\kewin\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\kewin\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

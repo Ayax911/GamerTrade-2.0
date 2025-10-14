@@ -8,7 +8,7 @@ namespace APiGamer.Repositorio.Abstracciones
 
         Task<(bool Esvalida, string mensaje)> ValidarConsulta(string consulta, Dictionary<string,object> parametros);
 
-        Task<DataTable> EjecturaProcedimientoAlmacenado(string consulta,Dictionary<string,object> parametros);
+        Task<DataTable> EjecturaProcedimientoAlmacenado(string NombreSp,Dictionary<string,object> parametros);
     }
     
 }

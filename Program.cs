@@ -7,6 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IProvedor, APiGamer.Servicios.Provedor>();
 builder.Services.AddScoped<APiGamer.Repositorio.Abstracciones.IRepositorioConsulta, APiGamer.Repositorio.RepositorioConsulta>();
+builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServicioConsultas, APiGamer.Servicios.ServicioConsultas>();
 
 var app = builder.Build();
 
