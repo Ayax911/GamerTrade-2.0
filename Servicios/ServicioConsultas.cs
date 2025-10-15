@@ -84,9 +84,10 @@ namespace APiGamer.Servicios
                 throw new ArgumentException("EL nombre del procedimiento almacenado no es válido. Debe comenzar con una letra o guion bajo y contener solo caracteres alfanuméricos y guiones bajos.", nameof(NombreSp));
             }
 
+            if(CamposEncriptar != null)
             {
-                var parametrosGenericos = ConvertirParametrosEncriptados(parametros, CamposEncriptar); 
-                return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametrosGenericos);
+               var parametrosGenericos = ConvertirParametrosEncriptados(parametros, CamposEncriptar); 
+               return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametrosGenericos);
             }
              var parametrosConvertidos = ConvertirParametrosJson(parametros);
             return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametrosConvertidos);
