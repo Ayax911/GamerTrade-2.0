@@ -77,8 +77,49 @@ namespace APiGamer.Repositorio
         }
         public async Task<(bool Esvalida, string mensaje)> ValidarConsulta(string consulta, Dictionary<string, object>? parametros)
         {
-          
-            return await Task.FromResult((true, "La consulta es válida."));
+            try
+            {
+                using (var conexion = _provedor.AbrirConexion())
+                using (var command = conexion.CreateCommand())
+                {
+                    command.CommandText = "sys.sp_describe_first_result_set";
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    // Pasamos la consulta como parámetro
+                    var sqlParam = new SqlParameter("@tsql", SqlDbType.NVarChar)
+                    {
+                        Value = consulta
+                    };
+                    command.Parameters.Add(sqlParam);
+
+                    // Parámetros adicionales requeridos por el SP
+                    command.Parameters.Add(new SqlParameter("@params", SqlDbType.NVarChar) { Value = DBNull.Value });
+                    command.Parameters.Add(new SqlParameter("@browse_information_mode", SqlDbType.Int) { Value = 0 });
+
+                    await command.ExecuteNonQueryAsync();
+
+                    return (true, "Consulta válida");
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                // MAPEO ESPECÍFICO DE ERRORES DE VALIDACIÓN SQL SERVER
+                string mensajeError = sqlEx.Number switch
+                {
+                    102 => "Error de sintaxis SQL: revise la estructura de la consulta",
+                    207 => "Nombre de columna inválido: verifique que las columnas existan",
+                    208 => "Objeto no válido: tabla o vista no existe en la base de datos",
+                    156 => "Palabra clave SQL incorrecta o en posición incorrecta",
+                    170 => "Error de sintaxis cerca de palabra reservada",
+                    _ => $"Error de validación SQL Server (Código {sqlEx.Number}): {sqlEx.Message}"
+                };
+
+                return (false, mensajeError);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error inesperado en validación: {ex.Message}");
+            }
         }
         public async Task<DataTable> EjecturaProcedimientoAlmacenado(string NombreSp, Dictionary<string, object>? parametros)
         {

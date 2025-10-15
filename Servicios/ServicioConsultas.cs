@@ -22,34 +22,15 @@ namespace APiGamer.Servicios
         }
         public async Task<(bool Esvalida, string mensaje)> ValidarConsulta(string consulta, Dictionary<string, object>? parametros, string[] tablasProhibidas)
         {
+            Console.WriteLine("Validando consulta: " + consulta);
             if (consulta == null)
             {
                 return await Task.FromResult((false, "La consulta no puede ser nula."));
             }
             List<string> palabrasProhibidas =
       [
-              "INSERT", "UPDATE", "DELETE",
-                "DROP", "ALTER", "CREATE", "EXEC", "EXECUTE", "UNION", "UNION SELECT",
-                "--", ";--", ";", "/*", "*/", "/*!", "*/", "#",
-                "@@", "@", "CHAR", "CHAR(", "NCHAR", "VARCHAR", "NVARCHAR", "TEXT", "NTEXT",
-                "CAST(", "CONVERT(", "DECLARE", "SET", "SELECT", "FROM", "WHERE", "OR", "AND",
-                "LIKE", "IN", "IS NULL", "IS NOT NULL",
-                "XP_", "SP_", "SP_MS", "SYS.", "SYSOBJECTS", "INFORMATION_SCHEMA", "INFORMATION_SCHEMA.TABLES",
-                "OBJECT_ID(", "OBJECT_NAME(", "DB_ID(", "DATABASE()", "SCHEMA", "SCHEMA_NAME(",
-                "GRANT", "REVOKE", "USE", "SHUTDOWN",
-                "WAITFOR", "WAITFOR DELAY", "SLEEP(", "BENCHMARK(", "DELAY",
-                "LOAD_FILE(", "INTO OUTFILE", "INTO DUMPFILE", "LOAD DATA", "SELECT INTO",
-                "OPENROWSET", "OPENDATASOURCE", "OPENQUERY",
-                "REPLACE", "TRUNCATE", "MERGE",
-                "EXEC sp_executesql", "EXECUTE IMMEDIATE",
-                "SYSTEM_USER", "CURRENT_USER", "USER()", "SESSION_USER",
-                "PASSWORD", "HASHBYTES(", "CRYPT_GEN_RANDOM(",
-                "CAST", "CONVERT", "INFORMATION_SCHEMA.COLUMNS",
-                "/*", "*/", "<!--", "-->",  "/*", "*/",
-                "0x", "0x27", "' OR '1'='1", "\" OR \"1\"=\"1", "' OR 1=1 --",
-                "OR 1=1", "'; DROP TABLE", "'); DROP TABLE",
-                "BENCHMARK(", "REGEXP", "RLIKE",
-                "`", "\"", "'"]; 
+             "DROP", "ALTER", "DELETE", "INSERT", "UPDATE", "EXEC", "EXECUTE",
+"UNION", "--", ";--", "/*", "*/", "xp_", "sp_", "shutdown", "sleep(", "benchmark("];
             foreach (var palabra in palabrasProhibidas)
             {
                 if (consulta.ToUpper().Contains(palabra))
@@ -64,7 +45,7 @@ namespace APiGamer.Servicios
                     return await Task.FromResult((false, $"La consulta intenta acceder a una tabla prohibida: {tabla}"));
                 }
             }
-            if (!consulta.ToUpper().Trim().StartsWith("SELECT") || !consulta.ToUpper().Trim().StartsWith("WITH"))
+            if (!consulta.ToUpper().Trim().StartsWith("SELECT") && !consulta.ToUpper().Trim().StartsWith("WITH"))
             {
                 return await Task.FromResult((false, "La consulta debe ser una consulta SELECT o una expresión común de tabla (CTE)."));
             }
@@ -94,19 +75,21 @@ namespace APiGamer.Servicios
         /// <param name="consulta"></param>
         /// <param name="parametros"></param>
         /// <returns></returns>
-        public async Task<DataTable> EjecturaProcedimientoAlmacenadoAsync(string NombreSp, Dictionary<string, object>? parametros,List<string> CamposEncriptar)
+        public async Task<DataTable> EjecturaProcedimientoAlmacenadoAsync(string NombreSp, Dictionary<string, object?>? parametros,List<string> CamposEncriptar)
         {
-            if(string.IsNullOrWhiteSpace(NombreSp) || !Regex.IsMatch(NombreSp, @"^[a-zA-Z_][a-zA-Z0-9_]*$"))
+            if (string.IsNullOrWhiteSpace(NombreSp) ||
+             !Regex.IsMatch(NombreSp.Trim(), @"^[a-zA-Z_][a-zA-Z0-9_]*$"))
             {
-                throw new ArgumentException("El nombre del procedimiento almacenado no es válido. Debe comenzar con una letra o guion bajo y contener solo caracteres alfanuméricos y guiones bajos.", nameof(NombreSp));
-            }
-            if(parametros != null)
-            {
-                var parametrosGenericos = ConvertirParametrosEncriptados(parametros, CamposEncriptar); // aqui hay un error
-                return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametrosGenericos);
+                Console.Write(NombreSp);
+                throw new ArgumentException("EL nombre del procedimiento almacenado no es válido. Debe comenzar con una letra o guion bajo y contener solo caracteres alfanuméricos y guiones bajos.", nameof(NombreSp));
             }
 
-            return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametros);
+            {
+                var parametrosGenericos = ConvertirParametrosEncriptados(parametros, CamposEncriptar); 
+                return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametrosGenericos);
+            }
+             var parametrosConvertidos = ConvertirParametrosJson(parametros);
+            return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametrosConvertidos);
         }
         /// <summary>
         /// Ejecuta Consultas Parametrizadas desde Json de forma segura
@@ -127,7 +110,7 @@ namespace APiGamer.Servicios
         /// <param name="Parametros"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        private Dictionary<string, object> ConvertirParametrosJson(Dictionary<string,object>? Parametros)
+        private Dictionary<string, object> ConvertirParametrosJson(Dictionary<string,object?>? Parametros)
         {
             var parametrosG = new Dictionary<string, object>();
             if(Parametros == null || Parametros.Count == 0)
@@ -234,7 +217,7 @@ namespace APiGamer.Servicios
             }
             return json.ToString()?? "";
         }
-        public Dictionary<string,object> ConvertirParametrosEncriptados(Dictionary<string,object>? parametros, List<string>? camposEncriptar)
+        public Dictionary<string,object> ConvertirParametrosEncriptados(Dictionary<string,object?>? parametros, List<string>? camposEncriptar)
         {
             // contraseña 123456 -> $2a$12$KIXQJf6Z8Hf3b8j1y5E5EuJ8mFz5e5e5e5e5e5e5e5e5e5e5e5e
             var parametrosGenericos = ConvertirParametrosJson(parametros);

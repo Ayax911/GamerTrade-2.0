@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("APiGamer")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5321baac542764b5483813de15cff781c1c11671")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35bbe617e32435c0577cc8ed1b63e754b791c9cf")]
 [assembly: System.Reflection.AssemblyProductAttribute("APiGamer")]
 [assembly: System.Reflection.AssemblyTitleAttribute("APiGamer")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

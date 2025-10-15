@@ -18,7 +18,7 @@ namespace APiGamer.Servicios
         }
         public string ObtenerCadenaDeConexion()
         {
-            return configuration.GetConnectionString("ConnectionString") ?? "";
+            return configuration.GetConnectionString("APIGamerBd") ?? "";
         }
         public SqlConnection AbrirConexion()
         {

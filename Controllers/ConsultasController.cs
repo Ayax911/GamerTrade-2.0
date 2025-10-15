@@ -39,7 +39,7 @@ namespace APiGamer.Controllers
                 {
                     return BadRequest("El campo 'consulta' no puede estar vacío.");
                 }
-                Dictionary<string, object> parametros = new Dictionary<string, object>();
+                Dictionary<string, object?> parametros = new Dictionary<string, object?>();
                 if (CuerpoSolicitud.TryGetValue("parametros", out var parametrosobj) && parametrosobj is JsonElement json1
                     && json1.ValueKind == JsonValueKind.Object)
                 {
