@@ -1,6 +1,5 @@
 ﻿using APiGamer.Repositorio.Abstracciones;
 using APiGamer.Servicios.Abstracciones;
-using APiGamer.Utilidades;
 using System.Data;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -10,8 +9,7 @@ namespace APiGamer.Servicios
     {
         private readonly IConfiguration _configuration;
         private readonly IRepositorioConsulta _repositorioConsulta;
-        private readonly BcryptGT _bcryptGT;
-        public ServicioConsultas(IConfiguration configuration, IRepositorioConsulta repositorioConsulta, BcryptGT bcrypt)
+        public ServicioConsultas(IConfiguration configuration, IRepositorioConsulta repositorioConsulta)
         {
             _configuration = configuration ?? throw new ArgumentNullException(
                nameof(configuration),
@@ -21,12 +19,8 @@ namespace APiGamer.Servicios
                nameof(repositorioConsulta),
                "IRepositorioConsulta no puede ser null. Verificar configuración de inyección de dependencias en Program.cs."
            );
-            _bcryptGT = bcrypt ?? throw new ArgumentNullException(
-               nameof(bcrypt),
-               "BcryptGT no puede ser null. Verificar configuración de inyección de dependencias en Program.cs."
-           );
         }
-        public async Task<(bool Esvalida, string mensaje)> ValidarConsulta(string consulta, Dictionary<string, object> parametros?, string[] tablasProhibidas)
+        public async Task<(bool Esvalida, string mensaje)> ValidarConsulta(string consulta, Dictionary<string, object>? parametros, string[] tablasProhibidas)
         {
             if (consulta == null)
             {
@@ -55,7 +49,7 @@ namespace APiGamer.Servicios
                 "0x", "0x27", "' OR '1'='1", "\" OR \"1\"=\"1", "' OR 1=1 --",
                 "OR 1=1", "'; DROP TABLE", "'); DROP TABLE",
                 "BENCHMARK(", "REGEXP", "RLIKE",
-                "`", "\"", "'"];
+                "`", "\"", "'"]; 
             foreach (var palabra in palabrasProhibidas)
             {
                 if (consulta.ToUpper().Contains(palabra))
@@ -93,6 +87,7 @@ namespace APiGamer.Servicios
             }
             return  await  _repositorioConsulta.EjecturaConsultaParametrizada(consulta, parametros);
         }
+
         /// <summary>
         /// Ejecuta Procedimientos Almacenados de forma segura
         /// </summary>
@@ -105,12 +100,13 @@ namespace APiGamer.Servicios
             {
                 throw new ArgumentException("El nombre del procedimiento almacenado no es válido. Debe comenzar con una letra o guion bajo y contener solo caracteres alfanuméricos y guiones bajos.", nameof(NombreSp));
             }
-            if(parametros == null)
+            if(parametros != null)
             {
-                parametros = new Dictionary<string, object>();
+                var parametrosGenericos = ConvertirParametrosEncriptados(parametros, CamposEncriptar); // aqui hay un error
+                return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametrosGenericos);
             }
-            var parametrosGenericos = ConvertirParametrosEncriptados(parametros, CamposEncriptar);
-            return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametrosGenericos);
+
+            return await _repositorioConsulta.EjecturaProcedimientoAlmacenado(NombreSp, parametros);
         }
         /// <summary>
         /// Ejecuta Consultas Parametrizadas desde Json de forma segura
@@ -134,17 +130,19 @@ namespace APiGamer.Servicios
         private Dictionary<string, object> ConvertirParametrosJson(Dictionary<string,object>? Parametros)
         {
             var parametrosG = new Dictionary<string, object>();
-            if(parametrosG == null || parametrosG.Count == 0)
+            if(Parametros == null || Parametros.Count == 0)
             {
                 return parametrosG ;
             }
             foreach (var parametro in Parametros)
-            {        
-                    string nombre = parametro.Key.StartsWith("@") ? parametro.Key: "@" + parametro.Key ;
+            {
+                
+                string nombre = parametro.Key.StartsWith("@") ? parametro.Key: "@" + parametro.Key ;
                     if(!Regex.IsMatch(nombre, @"^@\w+$"))
                     {
                         throw new ArgumentException($"El nombre del parámetro '{parametro.Key}' no es válido. Debe comenzar con '@' y contener solo caracteres alfanuméricos y guiones bajos.");
                     }
+                 
                     object? valorTipado;  
                 if(parametro.Value == null)
                 {
@@ -238,6 +236,7 @@ namespace APiGamer.Servicios
         }
         public Dictionary<string,object> ConvertirParametrosEncriptados(Dictionary<string,object>? parametros, List<string>? camposEncriptar)
         {
+            // contraseña 123456 -> $2a$12$KIXQJf6Z8Hf3b8j1y5E5EuJ8mFz5e5e5e5e5e5e5e5e5e5e5e5e
             var parametrosGenericos = ConvertirParametrosJson(parametros);
             foreach(var campo in camposEncriptar ?? new List<string>())
             {

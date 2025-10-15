@@ -15,7 +15,8 @@ namespace APiGamer.Repositorio
            );
         }
         public async Task<DataTable> EjecturaConsultaParametrizada(string consulta, Dictionary<string, object>? parametros)
-        {
+        { // SELECT * FROM USUARIOS WHERE NOMBRE = @nombre
+            // [@nombre:kewin]
             if (string.IsNullOrEmpty(consulta))
             {
                 throw new ArgumentException("La consulta no puede ser nula o vacía.", nameof(consulta));
@@ -36,6 +37,7 @@ namespace APiGamer.Repositorio
                 {
                     throw new InvalidOperationException("El proveedor de base de datos no está inicializado.");
                 }
+                
                 using (SqlConnection connection = _provedor.AbrirConexion())
                 {
                     using (var command = connection.CreateCommand())
@@ -78,21 +80,21 @@ namespace APiGamer.Repositorio
           
             return await Task.FromResult((true, "La consulta es válida."));
         }
-        public async Task<DataTable> EjecturaProcedimientoAlmacenado(string NombreSp, Dictionary<string, object> parametros)
+        public async Task<DataTable> EjecturaProcedimientoAlmacenado(string NombreSp, Dictionary<string, object>? parametros)
         {
+            // EXEC NombreSp @param1, @param2
             parametros = parametros ?? new Dictionary<string, object>();
             using (var coneccion = _provedor.AbrirConexion())
             {
                 using (var command = coneccion.CreateCommand())
                 {
-                    command.CommandText = NombreSp;
+                    command.CommandText = NombreSp; 
                     command.CommandType = CommandType.StoredProcedure;
                     agregarParametros((SqlCommand)command, parametros);
                     using (var adapter = new SqlDataAdapter((SqlCommand)command))
                     {
                         var dataTable = new DataTable();
                         adapter.Fill(dataTable);
-                        _provedor.CerrarConexion();
                         return await Task.FromResult(dataTable);
                     }
                 }
@@ -100,6 +102,7 @@ namespace APiGamer.Repositorio
         }
         public static void agregarParametros(SqlCommand command, Dictionary<string, object>? parametros)
         {
+           
             if (command == null)
             {
                 throw new ArgumentNullException(nameof(command), "El comando no puede ser null.");
@@ -115,10 +118,12 @@ namespace APiGamer.Repositorio
         }
         public static SqlParameter CrearSQLParametroOptimizado(string nombre, object? valor)
         {
+            
             if (string.IsNullOrEmpty(nombre))
             {
                 throw new ArgumentException("El nombre del parámetro no puede ser nulo o vacío.", nameof(nombre));
             }
+
             return valor switch
             {
                 null => new SqlParameter(nombre, DBNull.Value),

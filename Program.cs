@@ -9,6 +9,7 @@ builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IProvedor, APiGamer.
 builder.Services.AddScoped<APiGamer.Repositorio.Abstracciones.IRepositorioConsulta, APiGamer.Repositorio.RepositorioConsulta>();
 builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServicioConsultas, APiGamer.Servicios.ServicioConsultas>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
