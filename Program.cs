@@ -11,7 +11,10 @@ builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IProvedor, APiGamer.
 builder.Services.AddScoped<APiGamer.Repositorio.Abstracciones.IRepositorioConsulta, APiGamer.Repositorio.RepositorioConsulta>();
 builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServicioConsultas, APiGamer.Servicios.ServicioConsultas>();
 
-builder.Services.AddEndpointsApiExplorer();   // <--- FALTA AQUÍ
+builder.Services.AddScoped<APiGamer.Repositorio.Abstracciones.IRepositorioLectura, APiGamer.Repositorio.RepositorioLectura>();
+builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServiciosCrud, APiGamer.Servicios.ServiciosCrud>();
+
+builder.Services.AddEndpointsApiExplorer();   // <--- FALTA AQUï¿½
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
