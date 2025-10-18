@@ -1,4 +1,7 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +16,33 @@ builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServicioConsultas, 
 
 builder.Services.AddScoped<APiGamer.Repositorio.Abstracciones.IRepositorioLectura, APiGamer.Repositorio.RepositorioLectura>();
 builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServiciosCrud, APiGamer.Servicios.ServiciosCrud>();
+
+var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:ClaveSuperSecretaDeMasDe32caracteres"]!);
+
+builder.Services.AddAuthentication(option =>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+   .AddJwtBearer(options =>
+   {
+       options.TokenValidationParameters = new TokenValidationParameters
+       {
+           ValidateIssuer = true,
+           ValidateAudience = true,
+           ValidateLifetime = true,
+           ValidateIssuerSigningKey = true,
+           ValidIssuer = builder.Configuration["Jwt:Issuer"],
+           ValidAudience = builder.Configuration["Jwt:Audience"],
+           IssuerSigningKey = new SymmetricSecurityKey(key)
+       };
+   });
+
+builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.ITokenServices, APiGamer.Servicios.TokenServices>();
+
+
+
+
 
 builder.Services.AddEndpointsApiExplorer();   // <--- FALTA AQU�
 builder.Services.AddSwaggerGen();
@@ -39,6 +69,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

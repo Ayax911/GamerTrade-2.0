@@ -2,12 +2,14 @@
 using APiGamer.Servicios.Abstracciones;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace APiGamer.Controllers
 {
     [Route("api/Consultas")]
+    [Authorize]
     [ApiController]
     public class ConsultasController : ControllerBase
     {

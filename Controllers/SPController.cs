@@ -1,4 +1,5 @@
 ﻿using APiGamer.Servicios.Abstracciones;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 
@@ -7,6 +8,7 @@ using System.Data;
 namespace APiGamer.Controllers
 {
     [Route("api/SpController")]
+    [Authorize]
     [ApiController]
     public class SPController : ControllerBase
     {

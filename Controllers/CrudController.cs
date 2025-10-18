@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using APiGamer.Servicios.Abstracciones;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APiGamer.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class CrudController : ControllerBase
     {
