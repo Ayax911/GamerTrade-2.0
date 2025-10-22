@@ -39,13 +39,11 @@ C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\Microso
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.ClientModel.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Drawing.Common.dll
-C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Formats.Asn1.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Memory.Data.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Runtime.Caching.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Security.Permissions.dll
-C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Text.Json.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\System.Windows.Extensions.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
@@ -71,12 +69,6 @@ C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\scopedc
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets\msbuild.APiGamer.Microsoft.AspNetCore.StaticWebAssets.props
-C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets\msbuild.APiGamer.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets\msbuild.build.APiGamer.props
-C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.APiGamer.props
-C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.APiGamer.props
-C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets.pack.json
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\APiGamer.csproj.Up2Date
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\APiGamer.dll
@@ -87,3 +79,9 @@ C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\ref\APi
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\rjimswa.dswa.cache.json
+C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+C:\Users\kewin\Documents\proyectos c#\APiGamer\APiGamer\obj\Debug\net9.0\staticwebassets.build.json.cache

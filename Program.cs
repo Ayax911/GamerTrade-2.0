@@ -17,6 +17,8 @@ builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServicioConsultas, 
 builder.Services.AddScoped<APiGamer.Repositorio.Abstracciones.IRepositorioLectura, APiGamer.Repositorio.RepositorioLectura>();
 builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServiciosCrud, APiGamer.Servicios.ServiciosCrud>();
 
+
+
 var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:ClaveSuperSecretaDeMasDe32caracteres"]!);
 
 builder.Services.AddAuthentication(option =>

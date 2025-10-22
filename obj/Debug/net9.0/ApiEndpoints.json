@@ -1,5 +1,46 @@
 [
   {
+    "ContainingType": "APiGamer.Controllers.AuthController",
+    "Method": "VerificarCredenciales",
+    "RelativePath": "api/Auth/verificar",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tabla",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "esquema",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "campoUsuario",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "campoContrasena",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "valorUsuario",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "valorContrasena",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "APiGamer.Controllers.ConsultasController",
     "Method": "EjecutarConsultaParametrizada",
     "RelativePath": "api/Consultas/EjecutarConsulta",
@@ -11,6 +52,166 @@
         "Name": "CuerpoSolicitud",
         "Type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APiGamer.Controllers.CrudController",
+    "Method": "Actualizar",
+    "RelativePath": "api/Crud/actualizar",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tabla",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "esquema",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "clave",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "valor",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "datos",
+        "Type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      },
+      {
+        "Name": "camposEncriptar",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APiGamer.Controllers.CrudController",
+    "Method": "Crear",
+    "RelativePath": "api/Crud/crear",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tabla",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "esquema",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "datos",
+        "Type": "System.Collections.Generic.Dictionary\u00602[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Object, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": true
+      },
+      {
+        "Name": "camposEncriptar",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APiGamer.Controllers.CrudController",
+    "Method": "Eliminar",
+    "RelativePath": "api/Crud/eliminar",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tabla",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "esquema",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "clave",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "valor",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APiGamer.Controllers.CrudController",
+    "Method": "Listar",
+    "RelativePath": "api/Crud/listar",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tabla",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "esquema",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "limite",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APiGamer.Controllers.CrudController",
+    "Method": "ObtenerPorClave",
+    "RelativePath": "api/Crud/obtener",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tabla",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "esquema",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "clave",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "valor",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -42,24 +243,19 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "APiGamer.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
+    "ContainingType": "APiGamer.Controllers.UploadController",
+    "Method": "UploadJuego",
+    "RelativePath": "upload",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[APiGamer.WeatherForecast, APiGamer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "archivo",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
-    "EndpointName": "GetWeatherForecast"
+    "ReturnTypes": []
   }
 ]
