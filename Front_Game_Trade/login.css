@@ -1,0 +1,74 @@
+/* Fondo con patrón tipo PlayStation */
+body {
+    margin: 0;
+    height: 100vh;
+    background: url('Imagenes/fondo.jpg') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Caja de login */
+.login-box {
+    background-color: rgba(0, 0, 0, 0.85);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    width: 320px;
+    text-align: center;
+}
+
+/* Título */
+    .login-box h2 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+.login-box label {
+    display: block;
+    color: #ccc;
+    text-align: left;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #e0e0e0;
+}
+
+/* Botón */
+.login-box button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-box button:hover {
+  background-color: #0056b3;
+}
+
+/* Enlace */
+.forgot-password {
+  color: #ccc;
+  font-size: 13px;
+  display: block;
+  margin-top: 10px;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  color: #fff;
+}
