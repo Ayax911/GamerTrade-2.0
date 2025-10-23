@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil del Jugador</title>
+  <link rel="stylesheet" href="perfil.css" />
+  <link rel="stylesheet" href="subir.css">
+  <link rel="stylesheet" href="resena.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-left">
+        <a href="tienda.html" class="nav-link">Tienda</a>
+        <a href="#">Biblioteca</a>
+      </div>
+      <div class="nav-right">
+        <button class="btn-cart" onclick="window.location.href='carrito2.html'">
+  🛒 <span class="badge">3</span>
+        <button class="btn-logout">Cerrar Sesión</button>
+       
+      </div>
+    </nav>
+  </header>
+
+  <main class="perfil-container">
+    <section class="perfil-info">
+      <h2>¡Hola, Juan Esteban!</h2>
+      <div class="juegos">
+        <div class="juego">
+          <img src="imagenes/atelier.jpg" alt="Atelier Yumina">
+          <p class="nombre-juego">Atelier Yumina: La alquimista</p>
+          <button class="btn-resena">Calificar Juego</button>
+          <button class="btn-secondary">Descargar</button>
+        </div>
+        <div class="juego">
+          <img src="imagenes/yugioh.jpg" alt="Yu-Gi-Oh! Early Days">
+          <p class="nombre-juego">Yu-Gi-Oh! Early Days</p>
+           <button class="btn-resena">Calificar Juego</button>
+          <button class="btn-secondary">Descargar</button>
+        </div>
+      </div>
+    </section>
+
+    <aside class="perfil-lateral">
+      <h3>Videojuegos subidos</h3>
+      <div class="juego">
+        <img src="imagenes/bleach.jpg" alt="Bleach Rebirth of Souls">
+        <p>Bleach: Rebirth of Souls</p>
+      </div>
+           <button class="btn-upload">Subir un videojuego</button>
+
+      <h3>Tus reseñas</h3>
+      <div class="resena">
+        <p><strong>Jugador 23423523</strong></p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      </div>
+    </aside>
+  </main>
+
+  
+  <div id="overlay" class="overlay" style="display: none;">
+  <div class="modal">
+    <button id="cerrarModal" class="cerrar">✖</button>
+    <h2>Subir nuevo videojuego </h2>
+
+    <form id="formSubir">
+      <div class="columna-izquierda">
+        <div class="form-group">
+          <label for="nombre">Nombre del videojuego</label>
+          <input type="text" id="nombre" required />
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" rows="5" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Categoría</label>
+          <ul class="categorias">
+            <li><input type="radio" name="categoria" value="shooter" /> Shooter</li>
+            <li><input type="radio" name="categoria" value="estrategia" /> Estrategia</li>
+            <li><input type="radio" name="categoria" value="rol" /> Rol</li>
+            <li><input type="radio" name="categoria" value="aventura" /> Aventura</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="columna-derecha">
+        <div class="form-group">
+          <label for="precio">Precio de venta</label>
+          <input type="number" id="precio" min="0" required />
+        </div>
+
+        <div class="form-group">
+          <label for="imagen">Cargar imagen de portada</label>
+          <input type="file" id="imagen" accept="image/*" />
+          <button type="button" class="btn-subir">Cargar portada</button>
+        </div>
+
+        <div class="form-group">
+          <label for="archivo">Cargar ejecutable videojuego</label>
+          <input type="file" id="archivo" accept=".zip,.exe" />
+          <button type="button" class="btn-subir">Cargar videojuego</button>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn-principal">Subir videojuego</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="overlay-resena" class="overlay" style="display: none;">
+  <div class="modal-resena">
+    <button id="cerrarResena" class="cerrar">✖</button>
+
+    <h2>Calificación del videojuego</h2>
+
+    <div class="resena-contenido">
+      <!-- Columna izquierda -->
+      <div class="columna-izquierda">
+        <img src="imagenes/atelier.jpg" alt="Atelier Yumina" class="portada-juego" />
+        <p>Atelier Yumina: La alquimista</p>
+        <button class="btn-principal">Enviar Reseña</button>
+      </div>
+
+      <!-- Columna derecha -->
+      <div class="columna-derecha">
+        <label for="textoResena">Deja tu reseña</label>
+        <textarea id="textoResena" rows="6" placeholder="Escribe aquí tu opinión..."></textarea>
+
+        <label>Calificación global</label>
+        <div class="estrellas">
+          <span class="estrella" data-valor="1">★</span>
+          <span class="estrella" data-valor="2">★</span>
+          <span class="estrella" data-valor="3">★</span>
+          <span class="estrella" data-valor="4">★</span>
+          <span class="estrella" data-valor="5">★</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  fetch("carrito.html")
+    .then(res => res.text())
+    .then(html => {
+      document.body.insertAdjacentHTML("beforeend", html);
+      const script = document.createElement("script");
+      script.src = "carrito.js";
+      document.body.appendChild(script);
+    });
+</script>
+<script src="perfil.js"></script>
+</body>
+</html>
