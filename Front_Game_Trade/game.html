@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamer Trade | Final Fantasy VII Rebirth</title>
+  <link rel="stylesheet" href="game.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar">
+      <div class="nav-left">
+        <img src="Imagenes/minilogo.png" alt="Logo Gamer Trade" class="logo">
+        <a href="tienda.html" class="nav-link active">Tienda</a>
+        <a href="perfil.html" class="nav-link">Biblioteca</a>
+      </div>
+      <div class="nav-right">
+        <button class="btn-cart" onclick="window.location.href='carrito2.html'">
+  🛒 <span class="badge">3</span>
+        <button class="btn-logout">Cerrar Sesión</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="game-container">
+    <div class="game-image">
+      <img src="Imagenes/img1.jpg" alt="Final Fantasy VII Rebirth">
+    </div>
+
+    <div class="game-info">
+      <h1>Final Fantasy VII Rebirth</h1>
+      <span class="tag">Acción</span>
+      <p class="price">$40 COP</p>
+
+      <p class="description">
+        Final Fantasy VII Rebirth es un videojuego de acción RPG a cargo de Square Enix para PlayStation 5 y PC
+        que continúa con la historia de Final Fantasy VII Remake. La travesía desconocida continúa...
+        Tras escapar de la distópica ciudad de Midgar, Cloud y sus amigos se embarcan en un viaje por todo el planeta.
+        Les aguardan nuevas aventuras en vasto y vibrante mundo. Recorre las praderas cubiertas de hierba a
+        lomo de chocobo y explora los extensos ambientes. Combina el pensamiento estratégico con una
+        emocionante acción de combate junto a tus camaradas, incluyendo personajes nuevos añadidos.
+      </p>
+
+      <div class="actions">
+        <button class="btn-action buy">Comprar</button>
+        <button class="btn-action trade">Intercambiar</button>
+      </div>
+    </div>
+  </main>
+<script>
+  fetch("carrito.html")
+    .then(res => res.text())
+    .then(html => {
+      document.body.insertAdjacentHTML("beforeend", html);
+      const script = document.createElement("script");
+      script.src = "carrito.js";
+      document.body.appendChild(script);
+    });
+</script>
+  <script src="game.js"></script>
+</body>
+</html>
+

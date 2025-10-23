@@ -10,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+
+builder.Services.AddScoped<APiGamer.Repositorio.Abstracciones.IConexionFactory, APiGamer.Repositorio.SqlServerConexionFactory>();
+
 builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IProvedor, APiGamer.Servicios.Provedor>();
 builder.Services.AddScoped<APiGamer.Repositorio.Abstracciones.IRepositorioConsulta, APiGamer.Repositorio.RepositorioConsulta>();
 builder.Services.AddScoped<APiGamer.Servicios.Abstracciones.IServicioConsultas, APiGamer.Servicios.ServicioConsultas>();

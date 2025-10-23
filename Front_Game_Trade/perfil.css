@@ -1,0 +1,152 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: url('Imagenes/fondo.jpg') center/cover no-repeat;
+  color: #fff;
+}
+
+/* --- Header --- */
+.header {
+  background: rgba(20, 20, 20, 0.96);
+  padding: 10px 30px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-left a {
+  color: #ccc;
+  margin-right: 15px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.nav-left a.active {
+  color: #3f8efc;
+  border-bottom: 2px solid #3f8efc;
+}
+
+.nav-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-cart, .btn-logout {
+  background-color: #1a1a1a;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-cart {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff3c3c;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
+/* --- Perfil --- */
+.perfil-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 60px;
+}
+
+.perfil-info {
+  width: 60%;
+}
+
+.perfil-info h2 {
+  margin-bottom: 20px;
+}
+
+.juegos {
+  display: flex;
+  gap: 20px;
+}
+
+.juego {
+  background-color: #111;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #222;
+  padding: 15px;
+  text-align: center;
+  width: 200px;
+}
+
+.juego img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.nombre-juego {
+  margin: 10px 0;
+}
+
+.btn-primary {
+  background-color: #3f8efc;
+  border: none;
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.btn-secondary {
+  background-color: #bbb;
+  color: #000;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* --- Aside --- */
+.perfil-lateral {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  width: 30%;
+}
+
+.perfil-lateral h3 {
+  margin-top: 0;
+}
+
+.juego-subido img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-upload {
+  background-color: #3f8efc;
+  border: none;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.resena {
+  background-color: #fff;
+  color: #000;
+  border-radius: 6px;
+  padding: 10px;
+}

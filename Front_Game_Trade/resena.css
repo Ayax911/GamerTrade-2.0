@@ -1,0 +1,136 @@
+/* Fondo overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75); /* 🔹 semitransparente, deja ver el fondo */
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(6px); /* 🔹 desenfoque sutil */
+}
+
+/* Caja del modal */
+.modal-resena {
+  background: rgba(20, 20, 20, 0.96);
+  color: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Botón cerrar */
+.cerrar {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  background: #ff4b4b;
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 28px;
+  transition: 0.3s;
+}
+
+.cerrar:hover {
+  background: #ff7070;
+}
+
+/* Contenido general */
+.resena-contenido {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.columna-izquierda,
+.columna-derecha {
+  flex: 1;
+}
+
+.portada-juego {
+  width: 230px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  margin-bottom: 10px;
+}
+
+/* Texto y textarea */
+label {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+textarea {
+  width: 100%;
+  border-radius: 12px;
+  padding: 10px;
+  resize: none;
+  border: none;
+  font-size: 15px;
+  background-color: #fff;
+  color: #000;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+}
+
+/* Botones */
+.btn-principal {
+  background-color: #257cff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.btn-principal:hover {
+  background-color: #1b5fd8;
+}
+
+/* Estrellas */
+.estrellas {
+  font-size: 35px;
+  color: #666;
+  cursor: pointer;
+  user-select: none;
+}
+
+.estrella.activa {
+  color: #f8d400;
+}
+
+/* Animación de aparición */
+.overlay {
+  animation: aparecer 0.3s ease-in-out;
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

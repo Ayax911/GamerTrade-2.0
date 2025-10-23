@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kewin\\Documents\\proyectos c#\\APiGamer\\APiGamer\\APiGamer.csproj": {}
+    "C:\\Users\\USUARIO\\Desktop\\GamerTrade-2.0\\APiGamer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kewin\\Documents\\proyectos c#\\APiGamer\\APiGamer\\APiGamer.csproj": {
+    "C:\\Users\\USUARIO\\Desktop\\GamerTrade-2.0\\APiGamer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kewin\\Documents\\proyectos c#\\APiGamer\\APiGamer\\APiGamer.csproj",
+        "projectUniqueName": "C:\\Users\\USUARIO\\Desktop\\GamerTrade-2.0\\APiGamer.csproj",
         "projectName": "APiGamer",
-        "projectPath": "C:\\Users\\kewin\\Documents\\proyectos c#\\APiGamer\\APiGamer\\APiGamer.csproj",
-        "packagesPath": "C:\\Users\\kewin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kewin\\Documents\\proyectos c#\\APiGamer\\APiGamer\\obj\\",
+        "projectPath": "C:\\Users\\USUARIO\\Desktop\\GamerTrade-2.0\\APiGamer.csproj",
+        "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USUARIO\\Desktop\\GamerTrade-2.0\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\kewin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\USUARIO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

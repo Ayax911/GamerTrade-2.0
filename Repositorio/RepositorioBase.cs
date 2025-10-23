@@ -1,71 +1,116 @@
+// APiGamer/Repositorio/Compartido/RepositorioBase.cs
 using System.Data;
 using Microsoft.Data.SqlClient;
-using APiGamer.Servicios.Abstracciones;
+using APiGamer.Repositorio.Abstracciones;
+using BCrypt.Net;
 
 namespace APiGamer.Repositorio.Compartido
 {
-
+    /// <summary>
+    /// Clase base para todos los repositorios con métodos comunes
+    /// </summary>
     public abstract class RepositorioBase
     {
-        protected readonly IProvedor _provedor;
+        private readonly IConexionFactory _conexionFactory;
 
-        protected RepositorioBase(IProvedor provedor)
+        /// <summary>
+        /// Constructor que recibe la factory de conexiones
+        /// </summary>
+        protected RepositorioBase(IConexionFactory conexionFactory)
         {
-            _provedor = provedor ?? throw new ArgumentNullException(nameof(provedor));
+            _conexionFactory = conexionFactory ?? 
+                throw new ArgumentNullException(nameof(conexionFactory));
         }
 
+        /// <summary>
+        /// Crea una conexión usando la factory (mantiene compatibilidad con código legacy)
+        /// </summary>
         protected async Task<SqlConnection> CrearConexionAsync()
         {
-            var conexion = new SqlConnection(_provedor.ObtenerCadenaDeConexion());
-            await conexion.OpenAsync();
+            var conexion = (SqlConnection)_conexionFactory.CrearConexion();
+            
+            // Si la factory no abrió la conexión, abrirla
+            if (conexion.State != ConnectionState.Open)
+            {
+                await conexion.OpenAsync();
+            }
+            
             return conexion;
         }
 
-        protected static async Task<List<Dictionary<string, object?>>> ConvertirAListaAsync(SqlDataReader lector)
+        /// <summary>
+        /// Convierte un SqlDataReader a una lista de diccionarios
+        /// </summary>
+        protected async Task<IReadOnlyList<Dictionary<string, object?>>> ConvertirAListaAsync(
+            SqlDataReader lector)
         {
-            var resultados = new List<Dictionary<string, object?>>();
+            var resultado = new List<Dictionary<string, object?>>();
 
             while (await lector.ReadAsync())
             {
                 var fila = new Dictionary<string, object?>();
+                
                 for (int i = 0; i < lector.FieldCount; i++)
                 {
-                    fila[lector.GetName(i)] = lector.IsDBNull(i) ? null : lector.GetValue(i);
+                    string nombreColumna = lector.GetName(i);
+                    object? valor = lector.IsDBNull(i) ? null : lector.GetValue(i);
+                    fila[nombreColumna] = valor;
                 }
-                resultados.Add(fila);
+                
+                resultado.Add(fila);
             }
 
-            return resultados;
+            return resultado;
         }
 
-
-        protected static void EncriptarCampos(Dictionary<string, object?> datos, string? camposEncriptar)
+        /// <summary>
+        /// Encripta campos específicos usando BCrypt
+        /// </summary>
+        protected void EncriptarCampos(
+            Dictionary<string, object?> datos, 
+            string? camposEncriptar)
         {
-            if (string.IsNullOrWhiteSpace(camposEncriptar)) return;
+            if (string.IsNullOrWhiteSpace(camposEncriptar))
+                return;
 
-            var campos = camposEncriptar.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                                        .Select(c => c.Trim());
+            var campos = camposEncriptar
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(c => c.Trim())
+                .ToList();
 
             foreach (var campo in campos)
             {
-                if (datos.ContainsKey(campo) && datos[campo] != null)
+                if (datos.ContainsKey(campo) && 
+                    datos[campo] is string valorString && 
+                    !string.IsNullOrEmpty(valorString))
                 {
-                    string valor = datos[campo]!.ToString()!;
-                    datos[campo] = BCrypt.Net.BCrypt.HashPassword(valor);
+                    // Evitar re-encriptar hashes BCrypt existentes
+                    if (!valorString.StartsWith("$2a$") && 
+                        !valorString.StartsWith("$2b$") && 
+                        !valorString.StartsWith("$2y$"))
+                    {
+                        datos[campo] = BCrypt.Net.BCrypt.HashPassword(
+                            valorString, 
+                            workFactor: 12
+                        );
+                    }
                 }
             }
         }
 
-        protected static InvalidOperationException CrearExcepcionSql(
-            string mensajeBase,
-            SqlException ex,
-            string? contexto = null)
+        /// <summary>
+        /// Crea una excepción personalizada con información de SQL
+        /// </summary>
+        protected InvalidOperationException CrearExcepcionSql(
+            string mensaje, 
+            SqlException ex)
         {
-            return new InvalidOperationException(
-                $"{mensajeBase}. {(contexto != null ? $"Contexto: {contexto}. " : "")}" +
-                $"Error SQL #{ex.Number}: {ex.Message}",
-                ex
-            );
+            var mensajeCompleto = $"{mensaje}. " +
+                $"Error SQL {ex.Number}: {ex.Message}. " +
+                $"Procedimiento: {ex.Procedure ?? "N/A"}, " +
+                $"Línea: {ex.LineNumber}";
+            
+            return new InvalidOperationException(mensajeCompleto, ex);
         }
     }
 }
