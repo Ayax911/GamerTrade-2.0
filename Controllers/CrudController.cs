@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace APiGamer.Controllers
 {
     [ApiController]
-    [Authorize]
+    
     [Route("api/[controller]")]
     public class CrudController : ControllerBase
     {
@@ -18,6 +18,7 @@ namespace APiGamer.Controllers
 
 
         [HttpGet("listar")]
+        //[Authorize]
         public async Task<IActionResult> Listar(
             [FromQuery] string tabla,
             [FromQuery] string? esquema,
@@ -28,6 +29,7 @@ namespace APiGamer.Controllers
         }
 
         [HttpGet("obtener")]
+        [Authorize]
         public async Task<IActionResult> ObtenerPorClave(
             [FromQuery] string tabla,
             [FromQuery] string? esquema,
@@ -51,6 +53,7 @@ namespace APiGamer.Controllers
         }
 
         [HttpPut("actualizar")]
+        [Authorize]
         public async Task<IActionResult> Actualizar(
             [FromQuery] string tabla,
             [FromQuery] string? esquema,
@@ -64,6 +67,7 @@ namespace APiGamer.Controllers
         }
 
         [HttpDelete("eliminar")]
+        [Authorize]
         public async Task<IActionResult> Eliminar(
             [FromQuery] string tabla,
             [FromQuery] string? esquema,

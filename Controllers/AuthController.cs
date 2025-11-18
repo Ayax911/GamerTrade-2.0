@@ -10,14 +10,14 @@ namespace APiGamer.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IServiciosCrud _servicioCrud;
-        private readonly ITokenServices tokenServices;
-        private readonly ILogger _logger;
+        private readonly ITokenServices _tokenServices;
 
-        public AuthController(IServiciosCrud servicioCrud, ITokenServices tokenServices, ILogger logger)
+        public AuthController(
+            IServiciosCrud servicioCrud, 
+            ITokenServices tokenServices)
         {
             _servicioCrud = servicioCrud ?? throw new ArgumentNullException(nameof(servicioCrud));
-            this.tokenServices = tokenServices;
-            _logger = logger;
+            _tokenServices = tokenServices;
         }
 
         [HttpPost("verificar")]
@@ -31,12 +31,13 @@ namespace APiGamer.Controllers
         {
             var (codigo, mensaje) = await _servicioCrud.VerificarContrasenaAsync(
                 tabla, esquema, campoUsuario, campoContrasena, valorUsuario, valorContrasena);
-            _logger.LogInformation("Intento de autenticación para el usuario {Usuario} en la tabla {Tabla}: {Mensaje}",
-                valorUsuario, tabla, mensaje);
+            
+            Console.WriteLine($"Intento de login: {valorUsuario} - CÃ³digo: {codigo}");
+            
             if(codigo == 200)
             {
-            var token =  tokenServices.GenerarToken(valorUsuario);
-                return Ok(new { mensaje,token });
+                var token = _tokenServices.GenerarToken(valorUsuario);
+                return Ok(new { mensaje, token });
             }
 
             return StatusCode(codigo, new { mensaje });

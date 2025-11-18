@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿/*using System.Text.Json;
 using APiGamer.Servicios.Abstracciones;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace APiGamer.Controllers
 {
     [Route("api/Consultas")]
-    [Authorize]
+    //[Authorize]
     [ApiController]
     public class ConsultasController : ControllerBase
     {
@@ -75,6 +75,122 @@ namespace APiGamer.Controllers
                 {
                     return NotFound("La consulta se ejecutó correctamente pero no devolvió registros.");
                 }
+                return Ok(new
+                {
+                    Registros = list,
+                    Cantidad = list.Count
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ERROR al ejecutar consulta SQL: {Mensaje}", ex.Message);
+                return StatusCode(500, $"Error interno del servidor al ejecutar la consulta: {ex.Message}");
+            }
+        }
+    }
+}
+*/
+
+using System.Text.Json;
+using APiGamer.Servicios.Abstracciones;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using Microsoft.AspNetCore.Authorization;
+
+namespace APiGamer.Controllers
+{
+    [Route("api/Consultas")]
+    //[Authorize]
+    [ApiController]
+    public class ConsultasController : ControllerBase
+    {
+        readonly IServicioConsultas _servicioConsultas;
+        readonly ILogger<ConsultasController> _logger;
+
+        public ConsultasController(IServicioConsultas servicioConsultas, ILogger<ConsultasController> logger)
+        {
+            _servicioConsultas = servicioConsultas;
+            _logger = logger;
+        }
+
+        [HttpPost("EjecutarConsulta")]
+        public async Task<IActionResult> EjecutarConsultaParametrizada([FromBody] Dictionary<string, object> CuerpoSolicitud)
+        {
+            try
+            {
+                if (!CuerpoSolicitud.TryGetValue("consulta", out var consultaOBJ) || consultaOBJ is null)
+                {
+                    return BadRequest("El campo 'consulta' es obligatorio.");
+                }
+
+                string consulta = consultaOBJ switch
+                {
+                    string texto => texto,
+                    JsonElement json when json.ValueKind == JsonValueKind.String => json.GetString() ?? "",
+                    _ => ""
+                };
+
+                if (string.IsNullOrEmpty(consulta))
+                {
+                    return BadRequest("El campo 'consulta' no puede estar vacío.");
+                }
+
+                // Parámetros
+                Dictionary<string, object?> parametros = new Dictionary<string, object?>();
+                if (CuerpoSolicitud.TryGetValue("parametros", out var parametrosobj) &&
+                    parametrosobj is JsonElement json1 &&
+                    json1.ValueKind == JsonValueKind.Object)
+                {
+                    foreach (var prop in json1.EnumerateObject())
+                    {
+                        parametros[prop.Name] = prop.Value;
+                    }
+                }
+
+                _logger.LogInformation(
+                    "INICIO ejecución consulta SQL - Consulta: {Consulta}, Parámetros: {CantidadParametros}",
+                    consulta.Length > 100 ? consulta[..100] + "..." : consulta,
+                    parametros?.Count ?? 0
+                );
+
+                // EJECUTAR CONSULTA
+                var resultado = await _servicioConsultas.EjecutarConsultaParametrizadaDesdeJsonAsync(consulta, parametros);
+
+                // NORMALIZAR RESULTADO
+                var list = new List<Dictionary<string, object?>>();
+
+                foreach (DataRow row in resultado.Rows)
+                {
+                    var dict = new Dictionary<string, object?>();
+
+                    foreach (DataColumn col in resultado.Columns)
+                    {
+                        var valor = row[col];
+
+                        // FIX IMPORTANTE: NULLS desde SQL → null en JSON
+                        if (valor == DBNull.Value)
+                        {
+                            dict[col.ColumnName] = null;
+                        }
+                        else
+                        {
+                            dict[col.ColumnName] = valor;
+                        }
+                    }
+
+                    list.Add(dict);
+                }
+
+                _logger.LogInformation(
+                    "ÉXITO ejecución consulta SQL - Registros obtenidos: {Cantidad}",
+                    list.Count
+                );
+
+                if (list.Count == 0)
+                {
+                    return NotFound("La consulta se ejecutó correctamente pero no devolvió registros.");
+                }
+
                 return Ok(new
                 {
                     Registros = list,
